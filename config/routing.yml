@@ -1,0 +1,21 @@
+adenis_main:
+    resource: "@AdenisMainBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+#app:
+#    resource: "@AppBundle/Controller/"
+#    type:     annotation
+    
+_welcome:
+    pattern:  /
+    defaults: { _controller: AdenisMainBundle:Default:index }
+
+# security
+login:
+    pattern:   /login
+    defaults:  { _controller: AdenisDefaultBundle:Secured:login }
+login_check:
+    pattern:   /login_check
+logout:
+    pattern:   /logout

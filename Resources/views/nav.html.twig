@@ -1,0 +1,17 @@
+{%set route = app.request.attributes.get("_route") %}
+{%set act = "" %}
+{%if(route == 'main_call_search')%}{%set act = "search" %}
+{%elseif(route == 'main_client_contacts')%}{%set act = "contacts" %}
+{%elseif(route == 'main_call_statisticsglobal')%}{%set act = "statisticsglobal" %}
+{%endif%}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <ul class="nav navbar-nav">
+            <li {%if(act == 'statisticsglobal')%} class='active' {%endif%}><a href="{{ path("main_call_statisticsglobal") }}">Statistiques globales</a></li>
+            <li {%if(act == 'contacts')%} class='active' {%endif%}><a href="{{ path("main_client_contacts") }}">Contacts</a></li>
+            <li {%if(act == 'search')%} class='active' {%endif%}><a href="{{ path("main_call_search") }}?default=true">Appels</a></li>
+        </ul>
+    </div><!-- /.container-fluid -->
+</nav>

@@ -1,0 +1,132 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AdenisMainBundle:Call:statisticsglobal{% endblock %}
+
+{% block body %}
+    <div>
+
+        <div>  
+            <form class="form-inline" role="form" name="search" method="GET">  
+                <div class="form-group">
+                    <label for="durationmin" style="width: 100px">Duration min:</label>
+                    <input type="text" class="form-control" id="durationmin" name="durationmin" value="{{ searchparams.durationmin | default("") }}">
+                </div>
+                <div class="form-group">
+                    <label for="dateini" style="width: 100px">Date ini:</label>
+                    <input type="text" class="form-control datepicker-from" id="dateini" name="dateini" value="{{ searchparams.dateini | default("") }}">
+                </div><br/><br/>
+                <div class="form-group">
+                    <label for="durationmin" style="width: 100px">Duration max:</label>
+                    <input type="text" class="form-control" id="durationmax" name="durationmax" value="{{ searchparams.durationmax | default("") }}">
+                </div>
+                <div class="form-group">
+                    <label for="datefin" style="width: 100px">Date fin:</label>
+                    <input type="text" class="form-control datepicker-from" id="datefin" name="datefin" value="{{ searchparams.datefin | default("") }}">
+                </div><br/><br/>
+                <button type="submit" class="btn btn-default">Recalculer statistiques</button>
+            </form>
+        </div>
+        <hr/>     
+        <a id="export_equipments_xls" class="btn inline-item" href="{{ path('main_call_exportxls') }}"  title="Exportation des resultats (excel)">
+            <button>Export excel</button>
+        </a>
+
+        <div>
+            {%if(statistics_null_specials != null)%}
+                <table id="myTable_null_specials" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th width="8%"></th>
+                            <th style="border-right: solid 1px; color: gray" width="32%"></th>
+                            <th>Total</th>
+                            <th style="border-right: solid 1px; color: gray">Billsec (h:m:s)</th>
+                            <th style="background-color: #878BB6" title="NO ANSWER, BUSY, FAILED">No answered</th>
+                            <th style="background-color: #4ACAB4" title="ANSWERED">Answered</th>
+                            <th style="border-right: solid 1px; color: gray">Pourcentage %</th>
+                            <th>Special numbers</th>
+                            <th style="border-right: solid 1px; color: gray">Billsec (h:m:s)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for contact in statistics_null_specials %}
+                            <tr>
+                                <td></td>
+                                <td style="font-weight: bold; color: graytext; border-right: solid 1px;">{{contact.nomContact}}</td>
+                                <td>{{contact.numTotal}}</td>
+                                <td style="border-right: solid 1px; color: gray">{{contact.sumTotal}}</td>
+                                <td id="num_not_answered_{{contact.codeContact}}">{{contact.numNotAnswered}}</td>
+                                <td id="num_answered_{{contact.codeContact}}">{{contact.numAnswered}}</td>
+                                <td style="border-right: solid 1px; color: gray">{% if(contact.codeContact == 't') %}
+                                    <canvas id="calls" width="150" height="150"></canvas>{%endif%}
+                                </td>
+                                <td>{{contact.numSpecialNum}}</td>
+                                <td style="border-right: solid 1px; color: gray">{{contact.sumSpecialNum}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else%}    
+                <div>
+                    No results
+                </div>
+            {%endif%}
+        </div>
+
+        <div>
+            {%if(statistics != null)%}
+
+                <hr/>    
+
+                <table id="myTable_statisticsglobal" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th width="8%"></th>
+                            <th style="border-right: solid 1px; color: gray" width="32%">Contact</th>
+                            <th>Total</th>
+                            <th style="border-right: solid 1px; color: gray">Billsec (h:m:s)</th>
+                            <th>No answered</th>
+                            <th style="border-right: solid 1px; color: gray">Answered</th>
+                            <th>Special numbers</th>
+                            <th style="border-right: solid 1px; color: gray">Billsec (h:m:s)</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th style="border-right: solid 1px; color: gray">Contact</th>
+                            <th>Total</th>
+                            <th style="border-right: solid 1px; color: gray">Billsec (h:m:s)</th>
+                            <th>Not answered</th>
+                            <th style="border-right: solid 1px; color: gray">Answered</th>
+                            <th>Special numbers</th>
+                            <th style="border-right: solid 1px; color: gray">Billsec (h:m:s)</th>
+                        </tr>
+                    </tfoot>
+
+                    <tbody>
+                        {% for contact in statistics %}
+                            <tr>
+                                <td><a href="{{path('main_client_contact', {'code': "'"~contact.codeContact~"'"})}}">{{contact.codeContact}}</a></td>
+                                <td style="font-weight: bold; color: graytext; border-right: solid 1px;">{{contact.nomContact}}</td>
+                                <td>{{contact.numTotal}}</td>
+                                <td style="border-right: solid 1px; color: gray">{{contact.sumTotal}}</td>
+                                <td>{{contact.numNotAnswered}}</td>
+                                <td style="border-right: solid 1px; color: gray">{{contact.numAnswered}}</td>
+                                <td>{{contact.numSpecialNum}}</td>
+                                <td style="border-right: solid 1px; color: gray">{{contact.sumSpecialNum}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else%}    
+                <div>
+                    No results
+                </div>
+            {%endif%}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AdenisMainBundle:Call:contacts{% endblock %}
+
+{% block body %}
+    <div style="margin-left: 30px">
+        <div id="explorer-filter">
+            <input type="text" id="plugins4_q" value=" Filtrer... " onfocus="this.value = ''" class="input inline-item"/>
+        </div>
+
+        <div id="plugins4" class="demo plugin-demo">
+            {{ menutree|raw }}
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+

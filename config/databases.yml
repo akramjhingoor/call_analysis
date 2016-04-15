@@ -1,0 +1,20 @@
+# databases.yml
+parameters:
+  pdo.class: PDO
+  pdo.attr_errmode: 3
+  pdo.erromode_exception: 2
+  pdo.options:
+    %pdo.attr_errmode%: %pdo.erromode_exception%
+    
+  database.db2.dsn: firebird:host=127.0.0.1; dbname=C:\Users\txema\Desktop\INFOCOB.FDB; charset=UTF-8
+  database.db2.username: SYSDBA
+  database.db2.password: masterkey
+ 
+services:
+  db2:
+    class: %pdo.class%
+    arguments:
+      - %database.db2.dsn%
+      - %database.db2.username%
+      - %database.db2.password%
+      - %pdo.options%

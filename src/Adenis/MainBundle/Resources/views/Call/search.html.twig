@@ -1,0 +1,129 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AdenisMainBundle:Call:search{% endblock %}
+
+{% block body %}
+    <div>
+
+        <div>  
+            <form class="form-inline" role="form" name="search" method="GET">
+                
+                <div class="form-group">
+                    <label for="dst" style="width: 100px">dst:</label>
+                    <input type="text" class="form-control" id="dst" name="dst" value="{{ search_params.dst | default("") }}">
+                </div>
+                <div class="form-group">
+                    <label for="dateini" style="width: 100px">dateini:</label>
+                    <input type="text" class="form-control datepicker-from" id="dateini" name="dateini" value="{{ search_params.dateini | default("") }}">
+                </div>
+                <div class="form-group">
+                    <label for="durationmin" style="width: 100px">durationmin:</label>
+                    <input type="text" class="form-control" id="durationmin" name="durationmin" value="{{ search_params.durationmin | default("") }}">
+                </div><br/><br/>
+                
+                <div class="form-group">
+                    <label for="src" style="width: 100px">src:</label>
+                    <input type="text" class="form-control" id="src" name="src" value="{{ search_params.src | default("") }}">
+                </div>
+                <div class="form-group">
+                    <label for="datefin" style="width: 100px">datefin:</label>
+                    <input type="text" class="form-control datepicker-from" id="datefin" name="datefin" value="{{ search_params.datefin | default("") }}">
+                </div>
+                <div class="form-group">
+                    <label for="durationmin" style="width: 100px">durationmax:</label>
+                    <input type="text" class="form-control" id="durationmax" name="durationmax" value="{{ search_params.durationmax | default("") }}">
+                </div><br/><br/>
+                
+                <button type="submit" class="btn btn-default">Rechercher appels</button>
+            </form>
+        </div>
+
+        <hr/>
+
+        <div> 
+            {%if(listCdrent != null)%}
+                <ul class="paginator-custom">
+                    <li><a type="btn" href="{{path('main_call_paginate', {'page':'1'})}}" name="pageselect" style="font-weight: bold"><<</a></li>
+                    <li><a type="btn" href="{{path('main_call_paginate', {'page':''~(page-1)~''})}}" name="pageselect" style="font-weight: bold"><</a></li>
+                    <li style="font-weight: bold; color: graytext">{{page}} / {{pages}}
+                        <!--
+                        <select class="selectpicker">
+                            {% for i in 1..pages %}
+                                <option {% if(i == page) %}selected{%endif%}>{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        -->
+                    </li>
+                    <li><a type="btn" href="{{path('main_call_paginate', {'page':''~(page+1)~''})}}" name="pageselect" style="font-weight: bold">></a></li>
+                    <li><a type="btn" href="{{path('main_call_paginate', {'page':''~(pages)~''})}}" name="pageselect" style="font-weight: bold">>></a></li>
+                </ul>
+
+                <table id="myTable" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>calldate</th>
+                            <th>clid</th>
+                            <th>src</th>
+                            <th>dst</th>
+                            <th>dcontext</th>
+                            <th>channel</th>
+                            <th>dstchannel</th>
+                            <th>lastapp</th>
+                            <th>lastdata</th>
+                            <th>disposition</th>
+                            <th>billsec</th>
+                            <th>accountcode</th>
+                            <th>nomcontact</th>
+                            <th>codecontact</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>calldate</th>
+                            <th>clid</th>
+                            <th>src</th>
+                            <th>dst</th>
+                            <th>dcontext</th>
+                            <th>channel</th>
+                            <th>dstchannel</th>
+                            <th>lastapp</th>
+                            <th>lastdata</th>
+                            <th>disposition</th>
+                            <th>billsec</th>
+                            <th>accountcode</th>
+                            <th>nomcontact</th>
+                            <th>codecontact</th>
+                        </tr>
+                    </tfoot>
+
+                    <tbody>
+                        {% for c in listCdrent %}
+                            <tr>
+                                <td>{{c.calldate|date("d/m/Y")}}</td>
+                                <td>{{c.clid}}</td>
+                                <td><a href="{{path('main_call_telephone', {'number': "'"~c.src~"'"})}}">{{c.src}}</a></td>
+                                <td><a href="{{path('main_call_telephone', {'number': "'"~c.dst~"'"})}}">{{c.dst}}</a></td>
+                                <td>{{c.dcontext}}</td>
+                                <td>{{c.channel}}</td>
+                                <td>{{c.dstchannel}}</td>
+                                <td>{{c.lastapp}}</td>
+                                <td>{{c.lastdata}}</td>
+                                <td style="background-color:{%if c.disposition == 'ANSWERED'%}#4ACAB4{%else%}#878BB6{%endif%}">{{c.disposition}}</td>
+                                <td>{{c.billsec}}</td>
+                                <td>{{c.accountcode}}</td>
+                                <td>{{c.nomcontact}}</td>
+                                <td>{{c.codecontact}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else%}    
+                <div>
+                    {%if default == 'true'%}Ajouter des elements pour la recherche{%else%}No results{%endif%}
+                </div>
+            {%endif%}
+        </div>
+    </div>
+{% endblock %}
